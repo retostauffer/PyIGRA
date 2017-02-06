@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2017-02-06, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 12:38 on thinkreto
+# - L@ST MODIFIED: 2017-02-06 17:03 on pc24-c707
 # -------------------------------------------------------------------
 
 # Initialize logger
@@ -23,6 +23,8 @@ class Config( object ):
       # Optparse
       from optparse import OptionParser
       parser = OptionParser()
+      parser.add_option("-l", "--limit", dest="limit", default=None, type="int",
+                        help="Test/development option. Will only print the first -l/--limit entries")
       parser.add_option("-i", "--id", dest="station_id", default=None,
                         help="Station identifier which should be processed.")
       parser.add_option("-o", "--output", dest="outputfile", default=None,
@@ -46,9 +48,9 @@ class Config( object ):
       # If no input "file" is given: read ing
       # default config file (included in package source)
       if not file:
-         resource_package = __name__
-         resource_path = os.path.join('config','default.conf')
-         file = pkg_resources.resource_filename(resource_package, resource_path)
+         resource_package = os.path.dirname(__file__) 
+         log.debug("Package path is \"{0:s}\"".format(resource_package))
+         file = os.path.join(resource_package,'config','default.conf')
 
       # Read config file
       CNF = ConfigParser.ConfigParser()

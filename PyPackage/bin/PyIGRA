@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 12:42 on thinkreto
+# - L@ST MODIFIED: 2017-02-06 17:04 on pc24-c707
 # -------------------------------------------------------------------
 
 
@@ -93,9 +93,7 @@ if __name__ == "__main__":
             current = raso(match.groups())
             continue
          # no current object: just continue (no header found yet)
-         elif not current:
-            log.info("Current object not initialized: continue")
-            continue
+         elif not current: continue
 
          # Else check if this is a data line
          match = re.match(config.redata,line)
@@ -123,8 +121,14 @@ if __name__ == "__main__":
    else:
       fid = None
 
+   # Limit (if set by user)
+   if not config.limit:
+      N = len(results)
+   else:
+      N = config.limit
+
    # Print data
-   for i in range(0,len(results)):
+   for i in range(0,N):
       results[i].show(config.parameters,config.paramconfig,i==0,fid)
 
    if fid: fid.close()
