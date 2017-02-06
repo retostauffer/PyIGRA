@@ -41,13 +41,15 @@ piped into the output file (-o/--output) as specified in the script.
 
 INFORMATION
 =======================
-Autor:    Reto Stauffer
-Date:     2016-10-11
-License:  GPL3+
+- Autor:    Reto Stauffer
+- Date:     2016-10-11
+- License:  GPL3+
 
 A detailed description of the IGRA2 data format:
 - ftp://ftp.ncdc.noaa.gov/pub/data/igra/igra2-list-format.txt
+
 Station list used by PyIGRA_search:
 - http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt
+
 Direct data access:
 - http://www1.ncdc.noaa.gov/pub/data/igra/data/data-por/
