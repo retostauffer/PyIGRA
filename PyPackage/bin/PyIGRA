@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 17:04 on pc24-c707
+# - L@ST MODIFIED: 2017-02-06 17:54 on thinkreto
 # -------------------------------------------------------------------
 
 
@@ -62,6 +62,9 @@ if __name__ == "__main__":
    files = fzip.namelist()
    fzip.close()
 
+   # Delete zip file
+   if not config.keep: os.remove(zipfile)
+
    # Import required classes
    from PyIGRA import raso as raso
    from PyIGRA import raso_data as raso_data
@@ -106,8 +109,8 @@ if __name__ == "__main__":
       current.checklevels()
       results.append(current); current = None
 
-      # Looped over the whole file, close file
-      fid.close()
+      # Looped over the whole file, close file, and remove extracted file
+      fid.close(); os.remove(file)
 
       # Information for you
       log.info(" * Have found %d different soundings" % len(results))

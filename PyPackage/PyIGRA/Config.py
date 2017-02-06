@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2017-02-06, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 17:03 on pc24-c707
+# - L@ST MODIFIED: 2017-02-06 17:51 on thinkreto
 # -------------------------------------------------------------------
 
 # Initialize logger
@@ -25,6 +25,8 @@ class Config( object ):
       parser = OptionParser()
       parser.add_option("-l", "--limit", dest="limit", default=None, type="int",
                         help="Test/development option. Will only print the first -l/--limit entries")
+      parser.add_option("-k", "--keep", dest="keep", action="store_true", default=False,
+                        help="Boolean flag, default is False. If set to True the downloaded files will be kept")
       parser.add_option("-i", "--id", dest="station_id", default=None,
                         help="Station identifier which should be processed.")
       parser.add_option("-o", "--output", dest="outputfile", default=None,
