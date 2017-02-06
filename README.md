@@ -13,7 +13,12 @@ data set and prepares them in a more handy data format.
 Package Installation
 ====================
 
-Not yet written.
+```bash
+   cd PyPackage
+   sudo python setup.py install
+```
+
+Requires the two additional python modules ``logging`` and ``ConfigParser``.
 
 
 Using the PyIGRA Package
@@ -24,12 +29,23 @@ example of the main functionality of the PyIGRA package
 
 ```bash
    # Searching for a station, in this case Innsbruck
-   venv/bin/PyIGRA_search --id inns
-   
+   PyIGRA_search --id inns
+
    # Should print "AUM00011120  47.2603   11.3439  581.0    INNSBRUCK-FLUGHAFEN ...
    # Where the first part (AUM00011120) is the ID we need to download the data
-   venv/bin/PyIGRA --id AUM00011120 -o test1.txt
-   venv/bin/PyIGRA --id AUM00011120 -p PRESSURE,TEMPERATURE -o test2.txt
+   PyIGRA --id AUM00011120 -o test1.txt
+   PyIGRA --id AUM00011120 -p PRESSURE,TEMPERATURE -o test2.txt
+
+   # Additional arguments:
+   # For testing/development: only print the first 2 entries
+   PyIGRA --id AUM00011120 -l 2
+
+   # Keep zip file after download. If PyIGRA is called again (and the
+   # zip file exists on disc) no download will be required.
+   PyIGRA --id AUM00011120 --keep
+
+   # Change output format (only extract TEMPERATURE and PRESSURE
+   PyIGRA --id AUM00011120 --parameters TEMPERATURE,PRESSURE
 ```
 
 PyIGRA_seach is reading the latest station list and can be used to get the
@@ -41,7 +57,7 @@ piped into the output file (-o/--output) as specified in the script.
 
 INFORMATION
 =======================
-- Autor:    Reto Stauffer
+- Autor:    Reto Stauffer<at>uibk.ac.at
 - Date:     2016-10-11
 - License:  GPL3+
 

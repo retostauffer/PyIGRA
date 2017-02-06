@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 13:35 on thinkreto
+# - L@ST MODIFIED: 2017-02-06 20:30 on thinkreto
 # -------------------------------------------------------------------
 
 
@@ -21,6 +21,15 @@ log = logging.getLogger("PyIGRA.lib")
 # RASO class to store the data
 # -------------------------------------------------------------------
 class raso( object ):
+   """
+   Helper class ``raso'' (radio sounding) which stores the the 
+   observation blocks. Each sounding is represented by a block.
+
+   Args:
+      header: header line extracted from the IGRA data file.
+              The header contains information about date, time,
+              station, ...
+   """
 
    # Initialization routine. Input 'header' has to be a tuple
    # containing the necessary header information in a specific order
@@ -48,12 +57,12 @@ class raso( object ):
 
    # Small print method for raso objects
    def show(self,parameters,paramconfig,head=True,fid=None):
-      #####print "#  Raso object information:"
-      #####print "#  - ID:             %s" % self.ID
-      #####print "#  - Date/Hour:      %s" % self.DATE
-      #####print "#  - Release:        %s" % self.RELEASE
-      #####print "#  - Levels:         %d" % self.LEVELS
-      #####print "#  - Position:       %.4fN %.4fS" % (self.LAT,self.LON)
+      """
+      Method for raso class objects. Loops trough the extracted
+      data and prints the observations.
+      """
+
+      # Looping trough data (levels) and prints data
       for i in range(0,len(self.DATA)):
          # Print header
          if head and i==0:
@@ -72,10 +81,21 @@ class raso( object ):
    # Method to append data. Given format. Input is tuple from
    # regex match (re.match) in a certain order!
    def append(self,data):
+      """
+      Helper function appending observations to the raso objects.
+      """
       self.DATA.append(raso_data(data))
 
    # Check if we have as much data stored as indicated by the header
    def checklevels(self):
+      """
+      The header contains number of expected levels/observations
+      per block. Checking levels. If less lines of data have been
+      extracted than number levels expected the script will run into
+      an error. Note: entries exists where more data than the number
+      of expected levels will be returned wherefore the if condition
+      is set to "len(self.DATA) < self.LEVELS".
+      """
       #if not len(self.DATA) == self.LEVELS:
       if len(self.DATA) < self.LEVELS:
          log.error("only %d/%d data lines loaded. Stop." % (len(self.DATA),self.LEVELS))
@@ -86,6 +106,15 @@ class raso( object ):
 # Raso data class
 # -------------------------------------------------------------------
 class raso_data( object ):
+   """
+   Helper class raso_data. Each data IGRA data line consists of a set
+   of observed values (can be missing as well) such as TEMPERATURE,
+   GPHEIGHT, DEWPOINT, ...
+   This object parses and stores these values.
+
+   Args:
+      data: string containing one observation from the IGRA data file.
+   """
    def __init__(self,data):
       # Data/code description see:
       # - http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt
@@ -105,6 +134,21 @@ class raso_data( object ):
 
    # Print data
    def show(self,parameters,paramconfig,fid):
+      """
+      Helper method to show/display the data.
+
+      Args:
+         parameters: list object of characters to specify what should be
+                     printed (e.g., ['TEMPERATURE','PRESSURE']
+         paramconfig: parameter config returned by PyIGRA.Config. Dict
+                     object. Keys: parameter name; values: dict object
+                     with (at the moment) a format specification. E.g.,
+                     {'TEMPERATURE':{'format':'%7.2f'},...}
+         fid: either None or a file handler. If None the output will be
+              printed on stdout. If a file handler the data will be written
+              into the file specified by the file handler rather than printed
+              to stdout.
+      """
 
       tmpdata = []
       for rec in parameters: tmpdata.append("self.{0:s}".format(rec))

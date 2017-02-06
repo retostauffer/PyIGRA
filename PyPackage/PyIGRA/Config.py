@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2017-02-06, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 17:51 on thinkreto
+# - L@ST MODIFIED: 2017-02-06 20:20 on thinkreto
 # -------------------------------------------------------------------
 
 # Initialize logger
@@ -15,6 +15,13 @@ import logging
 log = logging.getLogger('PyIGRA.Config')
 
 class Config( object ):
+   """
+   Helper class handling the config arguments an user inputs.
+   The PyIGRA package comes with a default config file which is
+   located in config/default.conf. Some arguments can be overruled
+   using the input arguments. For more information call ``PyIGRA --help``.
+   """
+   
 
    def __init__(self,file=None):
 
@@ -86,19 +93,6 @@ class Config( object ):
       # Some output
       log.debug("Data URL: {0:s}".format(self.url))
       log.debug("Statlist URL: {0:s}".format(self.statlist))
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

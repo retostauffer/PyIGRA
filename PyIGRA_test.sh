@@ -12,3 +12,5 @@ venv/bin/PyIGRA_search --id inns
 venv/bin/PyIGRA --id AUM00011120 -o test1.txt
 venv/bin/PyIGRA --id AUM00011120 -p PRESSURE,TEMPERATURE -o test2.txt
 
+# Print first entry only
+venv/bin/PyIGRA --id AUM00011120 -l 1
