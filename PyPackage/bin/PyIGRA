@@ -1,0 +1,147 @@
+#!/usr/bin/python
+# -------------------------------------------------------------------
+# - NAME:        IGRAread.py
+# - AUTHOR:      Reto Stauffer
+# - DATE:        2016-10-11
+# -------------------------------------------------------------------
+# - DESCRIPTION: Extracting IGRA data sets.
+# -------------------------------------------------------------------
+# - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
+# -------------------------------------------------------------------
+# - L@ST MODIFIED: 2017-02-06 12:42 on thinkreto
+# -------------------------------------------------------------------
+
+
+# -------------------------------------------------------------------
+# Initialize logger
+# -------------------------------------------------------------------
+
+import logging, logging.config
+
+import sys, os
+os.environ['TZ'] = 'UTC'
+
+# Initialize logging
+log_level = logging.DEBUG
+log = logging.getLogger('PyIGRA')
+log.setLevel(log_level)
+ch = logging.StreamHandler()
+ch.setLevel(log_level)
+ch.setFormatter(logging.Formatter('# %(levelname)s - %(name)s - %(message)s'))
+log.addHandler(ch)
+
+
+# -------------------------------------------------------------------
+# Main script
+# -------------------------------------------------------------------
+if __name__ == "__main__":
+
+   # Parsing config
+   from PyIGRA import Config
+   config = Config()
+   zipfile = "{0:s}-data.txt.zip".format(config.station_id)
+   log.info(zipfile)
+
+   # ----------------------------------------------------------------
+   # Downloading zip file, and extract
+   # ----------------------------------------------------------------
+   if not os.path.isfile(zipfile):
+      log.info("Downloading zip file {0:s}".format(zipfile))
+      import urllib2, tempfile
+      tmp = tempfile.NamedTemporaryFile("wb",prefix="IGRA2")
+      response = urllib2.urlopen("%s/%s" % (config.url,zipfile))
+      zipcontent= response.read()
+      with open(zipfile,'w') as f:
+          f.write(zipcontent)
+      f.close()
+
+   # Unzip
+   from zipfile import ZipFile
+   fzip = ZipFile(zipfile, 'r')
+   fzip.extractall(".")
+   files = fzip.namelist()
+   fzip.close()
+
+   # Import required classes
+   from PyIGRA import raso as raso
+   from PyIGRA import raso_data as raso_data
+   import re, sys
+
+   # Element to store the parsed data
+   results = []
+   current = None
+
+   # Loop over the extracted files and read them
+   for file in files:
+
+      # Open file
+      log.info("Reading file %s now" % file)
+      fid = open(file,"r")
+
+      for line in iter(fid.readline,b''): 
+
+         # Does the line match a header line?
+         match = re.match(config.rehead,line)
+         if match: 
+            # If 'current' is already defined we have found a new
+            # raso entry: save 'current' object to results and
+            # initialize a new raso object.
+            if not current == None:
+               current.checklevels()
+               results.append(current)
+            ##log.info("Found new block entry (Nr: %d): create new raso object" % len(results))
+            current = raso(match.groups())
+            continue
+         # no current object: just continue (no header found yet)
+         elif not current:
+            log.info("Current object not initialized: continue")
+            continue
+
+         # Else check if this is a data line
+         match = re.match(config.redata,line)
+         if not match: continue
+
+         # Appending data if it matches
+         current.append(match.groups())
+
+      # Append last object as well
+      current.checklevels()
+      results.append(current); current = None
+
+      # Looped over the whole file, close file
+      fid.close()
+
+      # Information for you
+      log.info(" * Have found %d different soundings" % len(results))
+
+   # ----------------------------------------------------------------
+   # Print data of the first two soundings
+   # ----------------------------------------------------------------
+   if not config.outputfile == None:
+      log.info("Write output into \"{0:s}\".".format(config.outputfile))
+      fid = open(config.outputfile,"w")
+   else:
+      fid = None
+
+   # Print data
+   for i in range(0,len(results)):
+      results[i].show(config.parameters,config.paramconfig,i==0,fid)
+
+   if fid: fid.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

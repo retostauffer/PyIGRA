@@ -1,0 +1,6 @@
+
+old
+venv
+test*.txt
+*-data.txt
+*-data.txt.zip
