@@ -1,4 +1,7 @@
-
+#!/bin/bash
+# -------------------------------------------------------------------
+# PyIGRA test script (bash shell)
+# -------------------------------------------------------------------
 
 
 # Searching for a station, in this case Innsbruck
