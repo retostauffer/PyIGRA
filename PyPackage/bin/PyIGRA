@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 17:54 on thinkreto
+# - L@ST MODIFIED: 2018-02-07 13:42 on marvin
 # -------------------------------------------------------------------
 
 
@@ -73,6 +73,7 @@ if __name__ == "__main__":
    # Element to store the parsed data
    results = []
    current = None
+   skipped = 0
 
    # Loop over the extracted files and read them
    for file in files:
@@ -93,7 +94,13 @@ if __name__ == "__main__":
                current.checklevels()
                results.append(current)
             ##log.info("Found new block entry (Nr: %d): create new raso object" % len(results))
-            current = raso(match.groups())
+            tmp = raso(match.groups())
+            # If there was a problem extracting the header information the
+            # DATE argument is None: in this case skip!
+            if not tmp.DATE:
+                skipped += 1
+                continue
+            current = tmp
             continue
          # no current object: just continue (no header found yet)
          elif not current: continue
@@ -106,6 +113,9 @@ if __name__ == "__main__":
          current.append(match.groups())
 
       # Append last object as well
+      if current is None:
+          log.error("No data extracted from the raw file: no data or regexp config wrong!")
+          sys.exit(9)
       current.checklevels()
       results.append(current); current = None
 
@@ -113,7 +123,9 @@ if __name__ == "__main__":
       fid.close(); os.remove(file)
 
       # Information for you
-      log.info(" * Have found %d different soundings" % len(results))
+      log.info("Have found {:d} different soundings".format(len(results)))
+      if skipped > 0:
+          log.info("{:d} messages skipped as date information was not valid!".format(skipped))
 
    # ----------------------------------------------------------------
    # Print data of the first two soundings

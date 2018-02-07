@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 20:30 on thinkreto
+# - L@ST MODIFIED: 2018-02-07 13:39 on marvin
 # -------------------------------------------------------------------
 
 
@@ -40,11 +40,24 @@ class raso( object ):
       dd   = int(header[3]);      HH = int(header[4])
       release_HH = int(header[5][0:2])
       release_MM = int(header[5][2:])
+
+      # If nominal observation hour (HH) is not given but
+      # the release time contains proper hour (release_HH) take
+      # relase_HH as HH.
+      if HH == 99 and not release_HH == 99:
+          HH == release_HH
+
       # Append header information to object properties
       from datetime import datetime as dt
       self.ID      = header[1]
-      self.DATE    = dt.strptime("%04d-%02d-%02d %02d"      % (yyyy,mm,dd,HH),                   "%Y-%m-%d %H")
+      try:
+         self.DATE = dt.strptime("%04d-%02d-%02d %02d" % (yyyy,mm,dd,HH), "%Y-%m-%d %H")
+      except:
+         self.DATE = None
+
       if not header[5] == "9999":
+         # If release minute is 99 (minute unknown): set minute to 00!
+         if release_MM == 99: release_MM = 0
          self.RELEASE = dt.strptime("%04d-%02d-%02d %02d:%02d" % (yyyy,mm,dd,release_HH,release_MM),"%Y-%m-%d %H:%M") 
       else:
          self.RELEASE = None

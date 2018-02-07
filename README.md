@@ -9,6 +9,14 @@ __PyIGRA__ downloads and extracts data from the
 [Integrated Global Radiosonde Archive](https://www.ncdc.noaa.gov/data-access/weather-balloon/integrated-global-radiosonde-archive)
 data set and prepares them in a more handy data format.
 
+**Please note:** if sounding release time is not reported at all (data file
+contains `9999` for `HHMM` the message will not be extracted form the raw data file.
+If only minutes are missing (e.g., `2099` is reported) the release time minutes will
+be set to `00` (in case of `2099` `20:00 UTC` is assumed).
+If the nominal hour is not reported (see [format description file](ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt)
+but the release time contains valid hour information the hour from the release time will
+be used as nominal hour.
+
 
 Package Installation
 ====================
@@ -62,7 +70,8 @@ INFORMATION
 - License:  GPL3+
 
 A detailed description of the IGRA2 data format:
-- ftp://ftp.ncdc.noaa.gov/pub/data/igra/igra2-list-format.txt
+- ftp://ftp.ncdc.noaa.gov/pub/data/igra/igra2-list-format.txt (station list format)
+- ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt (data format)
 
 Station list used by PyIGRA_search:
 - http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt
