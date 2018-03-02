@@ -9,13 +9,20 @@ __PyIGRA__ downloads and extracts data from the
 [Integrated Global Radiosonde Archive](https://www.ncdc.noaa.gov/data-access/weather-balloon/integrated-global-radiosonde-archive)
 data set and prepares them in a more handy data format.
 
-**Please note:** if sounding release time is not reported at all (data file
-contains `9999` for `HHMM` the message will not be extracted form the raw data file.
-If only minutes are missing (e.g., `2099` is reported) the release time minutes will
-be set to `00` (in case of `2099` `20:00 UTC` is assumed).
-If the nominal hour is not reported (see [format description file](ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt)
-but the release time contains valid hour information the hour from the release time will
-be used as nominal hour.
+**NOTE**: Slightly changed output format. The data set provides information
+about the nominal time (date/time when the sounding was planned) and
+a release time (actual release time). In an earlier version I've tried
+to combine them in a simple way which was not always correct. I've decided
+to return the full information.
+
+* `NOMINAL`: nominal date/hour of the sounding (format `yyyymmddHH`).
+    `HH` _can be 99 (missing)_.
+* `RELEASE`: release time, format is `HHMM` (hour/minute).
+    Can be `0000` trough `2359`. If minute is missing the last two
+    digits are `99`. If both, hour and minute is missing, a `9999`
+    is returned.
+
+For more details please read the data set [format description file](ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt).
 
 
 Package Installation

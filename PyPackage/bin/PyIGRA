@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2018-02-21 09:50 on marvin
+# - L@ST MODIFIED: 2018-03-02 08:45 on marvin
 # -------------------------------------------------------------------
 
 
@@ -96,8 +96,8 @@ if __name__ == "__main__":
             ##log.info("Found new block entry (Nr: %d): create new raso object" % len(results))
             tmp = raso(match.groups())
             # If there was a problem extracting the header information the
-            # DATE argument is None: in this case skip!
-            if not tmp.DATE:
+            # NOMINAL argument is None: in this case skip!
+            if not tmp.NOMINAL:
                 skipped += 1
                 continue
             current = tmp
@@ -124,7 +124,6 @@ if __name__ == "__main__":
 
       # Information for you
       log.info("Have found {:d} different soundings".format(len(results)))
-      sys.exit(3)
       if skipped > 0:
           log.info("{:d} messages skipped as date information was not valid!".format(skipped))
 

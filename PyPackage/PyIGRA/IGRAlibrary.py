@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2018-02-07 13:39 on marvin
+# - L@ST MODIFIED: 2018-03-02 08:51 on marvin
 # -------------------------------------------------------------------
 
 
@@ -36,37 +36,22 @@ class raso( object ):
    # as read.
    def __init__(self,header):
       # Convert date/time elements
-      yyyy = int(header[1]);      mm = int(header[2])
-      dd   = int(header[3]);      HH = int(header[4])
-      release_HH = int(header[5][0:2])
-      release_MM = int(header[5][2:])
+      self.NOMINAL = {}
+      self.NOMINAL["yyyy"] = int(header[1])
+      self.NOMINAL["mm"]   = int(header[2])
+      self.NOMINAL["dd"]   = int(header[3])
+      self.NOMINAL["HH"]   = int(header[4])
+      self.RELEASE = {}
+      self.RELEASE["HH"]   = int(header[5][0:2])
+      self.RELEASE["MM"]   = int(header[5][2:])
 
-      # If nominal observation hour (HH) is not given but
-      # the release time contains proper hour (release_HH) take
-      # relase_HH as HH.
-      if HH == 99 and not release_HH == 99:
-          HH == release_HH
+      self.LEVELS    = int(header[6])
+      self.P_SRC     = str(header[7])
+      self.NP_SRC    = str(header[8])
+      self.LAT       = float(header[9])/1.e4 
+      self.LON       = float(header[10])/1.e4
+      self.DATA      = []   # No data: empty list
 
-      # Append header information to object properties
-      from datetime import datetime as dt
-      self.ID      = header[1]
-      try:
-         self.DATE = dt.strptime("%04d-%02d-%02d %02d" % (yyyy,mm,dd,HH), "%Y-%m-%d %H")
-      except:
-         self.DATE = None
-
-      if not header[5] == "9999":
-         # If release minute is 99 (minute unknown): set minute to 00!
-         if release_MM == 99: release_MM = 0
-         self.RELEASE = dt.strptime("%04d-%02d-%02d %02d:%02d" % (yyyy,mm,dd,release_HH,release_MM),"%Y-%m-%d %H:%M") 
-      else:
-         self.RELEASE = None
-      self.LEVELS  = int(header[6])
-      self.P_SRC   = str(header[7])
-      self.NP_SRC  = str(header[8])
-      self.LAT     = float(header[9])/1.e4 
-      self.LON     = float(header[10])/1.e4
-      self.DATA    = []   # No data: empty list
 
    # Small print method for raso objects
    def show(self,parameters,paramconfig,head=True,fid=None):
@@ -80,14 +65,17 @@ class raso( object ):
          # Print header
          if head and i==0:
             if fid:
-               fid.write("TIMESTAMP {0:s}\n".format(" ".join(parameters)))
+               fid.write("NOMINAL    RELEASE {0:s}\n".format(" ".join(parameters)))
             else:
-               print "TIMESTAMP", " ".join(parameters)
+               print("{0:s} {1:s}".format("NOMINAL", " ".join(parameters)))
          # Print time stamp
+         NOMINAL = "{0:04d}{1:02d}{2:02d}{3:02d}".format(self.NOMINAL["yyyy"],
+                    self.NOMINAL["mm"],self.NOMINAL["dd"],self.NOMINAL["HH"])
+         RELEASE = "{0:02d}{1:02d}".format(self.RELEASE["HH"],self.RELEASE["MM"])
          if fid:
-            fid.write("%s " % self.DATE.strftime("%s"))
+            fid.write("{:s} {:s}   ".format(NOMINAL,RELEASE))
          else:
-            print "%s " % self.DATE.strftime("%s"),
+            print("{:s} {:s}   ".format(NOMINAL,RELEASE))
          # Show data
          self.DATA[i].show(parameters,paramconfig,fid)
 
@@ -111,7 +99,7 @@ class raso( object ):
       """
       #if not len(self.DATA) == self.LEVELS:
       if len(self.DATA) < self.LEVELS:
-         log.error("only %d/%d data lines loaded. Stop." % (len(self.DATA),self.LEVELS))
+         log.error("only {0:d}/{1:d} data lines loaded. Stop.".format(len(self.DATA),self.LEVELS))
          import sys; sys.exit(9)
 
 
