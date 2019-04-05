@@ -7,3 +7,10 @@ test*.txt
 
 *.pyc
 */*.pyc
+
+# Ignore downloaded "cached" files
+*.txt
+*.zip
+
+# Ignore compiled README file
+README.pdf
