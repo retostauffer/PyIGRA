@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2019-04-05 10:04 on marvin
+# - L@ST MODIFIED: 2019-04-05 10:08 on marvin
 # -------------------------------------------------------------------
 
 
@@ -42,8 +42,6 @@ if __name__ == "__main__":
    zipfile = "{0:s}-data.txt.zip".format(config.station_id)
    log.info(zipfile)
 
-   ENC = "utf8"
-
    # ----------------------------------------------------------------
    # Downloading zip file, and extract
    # ----------------------------------------------------------------
@@ -58,7 +56,7 @@ if __name__ == "__main__":
       response = urlopen("%s/%s" % (config.url,zipfile))
       zipcontent= response.read()
       with open(zipfile,'w') as f:
-          f.write(zipcontent.decode(ENC))
+          f.write(zipcontent)
       f.close()
 
    # Unzip
