@@ -6,6 +6,9 @@
 install:
 	sudo python setup.py install
 
+git-install:
+	sudo pip install git+https://github.com/retostauffer/PyIGRA.git
+
 # Create readme file
 .PHONY: readme
 readme:

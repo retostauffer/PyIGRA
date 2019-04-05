@@ -30,11 +30,21 @@ For more details please read the data set [format description file](ftp://ftp.nc
 
 # Package Installation
 
+Clone git repository and install the package via:
+
 ```bash
+   git clone https://github.com/retostauffer/PyIGRA.git PyIGRA
    python setup.py install
 ```
 
-Requires the additional python module `ConfigParser`.
+Or directly install via github:
+
+```bash
+   pip install git+https://github.com/retostauffer/PyIGRA.git
+```
+
+You may use `sudo python ...` or `sudo pip install ...` depending on your
+system.  Requires the additional python module `ConfigParser`.
 
 
 # Using the PyIGRA Package
