@@ -29,11 +29,10 @@ Package Installation
 ====================
 
 ```bash
-   cd PyPackage
-   sudo python setup.py install
+   python setup.py install
 ```
 
-Requires the two additional python modules ``logging`` and ``ConfigParser``.
+Requires the additional python modules and `ConfigParser`.
 
 
 Using the PyIGRA Package

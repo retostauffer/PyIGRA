@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 12:27 on thinkreto
+# - L@ST MODIFIED: 2019-04-05 08:49 on marvin
 # -------------------------------------------------------------------
 
 
@@ -33,12 +33,19 @@ log.addHandler(ch)
 if __name__ == "__main__":
 
    # Parsing config
+   import sys
+   import tempfile
    from PyIGRA import Config
+   ENC = "utf8"
    log.info('foo main')
    config = Config()
 
-   import urllib2, tempfile
-   response = urllib2.urlopen(config.statlist)
+   if sys.version_info[0] <= 2:
+      from urllib2 import urlopen
+   else:
+      from urllib.request import urlopen
+
+   response = urlopen(config.statlist)
    content  = response.readlines()
 
    log.info("Searching for \"{0:s}\"".format(config.station_id))
@@ -48,8 +55,9 @@ if __name__ == "__main__":
       station_id   = line[0:11].upper()
       station_name = line[41:72].upper()
 
-      if config.station_id in station_id or config.station_id in station_name:
-         print line
+      if config.station_id in station_id.decode(ENC) or \
+         config.station_id in station_name.decode(ENC):
+         print(line.decode(ENC))
          found += 1
 
    if found == 0:

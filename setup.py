@@ -10,7 +10,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2017-02-05, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 12:16 on thinkreto
+# - L@ST MODIFIED: 2019-04-05 08:35 on marvin
 # -------------------------------------------------------------------
 from setuptools import setup
 
@@ -30,9 +30,7 @@ setup(name='PyIGRA',     # This is the package name
       author_email='reto.stauffer@uibk.ac.at',
       license='GPL-2',
       packages=['PyIGRA'],
-      install_requires=[
-         'ConfigParser','logging'
-      ],
+      install_requires=['ConfigParser'],
       scripts=['bin/PyIGRA','bin/PyIGRA_search'],
       include_package_data=True,
       czip_safe=False)

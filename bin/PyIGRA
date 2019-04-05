@@ -8,7 +8,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2018-03-02 08:45 on marvin
+# - L@ST MODIFIED: 2019-04-05 09:04 on marvin
 # -------------------------------------------------------------------
 
 
@@ -79,11 +79,14 @@ if __name__ == "__main__":
    for file in files:
 
       # Open file
-      log.info("Reading file %s now" % file)
+      log.info("Reading file %s" % file)
       fid = open(file,"r")
 
-      for line in iter(fid.readline,b''): 
+      line_counter = 0
+      #for line in iter(fid.readline, b''): 
+      for line in fid:
 
+         line_counter = line_counter + 1
          # Does the line match a header line?
          match = re.match(config.rehead,line)
          if match: 
@@ -108,6 +111,7 @@ if __name__ == "__main__":
          # Else check if this is a data line
          match = re.match(config.redata,line)
          if not match: continue
+         ##sys.stdout.write("\rFound {0:5d} {1:5d}".format(len(results), line_counter))
 
          # Appending data if it matches
          current.append(match.groups())
@@ -144,7 +148,7 @@ if __name__ == "__main__":
 
    # Print data
    for i in range(0,N):
-      results[i].show(config.parameters,config.paramconfig,i==0,fid)
+      results[i].show(config.parameters, config.paramconfig, i == 0, fid)
 
    if fid: fid.close()
 

@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2017-02-06, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2017-02-06 20:20 on thinkreto
+# - L@ST MODIFIED: 2019-04-05 08:43 on marvin
 # -------------------------------------------------------------------
 
 # Initialize logger
@@ -25,7 +25,14 @@ class Config( object ):
 
    def __init__(self,file=None):
 
-      import sys, os, pkg_resources, ConfigParser, re
+      import sys
+      import os
+      import re
+      import pkg_resources
+      if sys.version_info[0] <= 2:
+          import ConfigParser as ConfigParser
+      else:
+          import configparser as ConfigParser
 
       # Optparse
       from optparse import OptionParser

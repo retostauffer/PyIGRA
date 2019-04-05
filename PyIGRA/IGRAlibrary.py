@@ -7,7 +7,7 @@
 # -------------------------------------------------------------------
 # - EDITORIAL:   2016-10-11, RS: Created file on thinkreto.
 # -------------------------------------------------------------------
-# - L@ST MODIFIED: 2018-03-02 08:51 on marvin
+# - L@ST MODIFIED: 2019-04-05 09:07 on marvin
 # -------------------------------------------------------------------
 
 
@@ -21,20 +21,24 @@ log = logging.getLogger("PyIGRA.lib")
 # RASO class to store the data
 # -------------------------------------------------------------------
 class raso( object ):
-   """
-   Helper class ``raso'' (radio sounding) which stores the the 
-   observation blocks. Each sounding is represented by a block.
-
-   Args:
-      header: header line extracted from the IGRA data file.
-              The header contains information about date, time,
-              station, ...
-   """
 
    # Initialization routine. Input 'header' has to be a tuple
    # containing the necessary header information in a specific order
    # as read.
-   def __init__(self,header):
+   def __init__(self, header):
+      """raso(header)
+
+      Helper class ``raso'' (radio sounding) which stores the the 
+      observation blocks. Each sounding is represented by a block.
+
+      Parameters
+      ----------
+      header : list
+         header line extracted from the IGRA data file.
+         The header contains information about date, time,
+         station, ...
+      """
+
       # Convert date/time elements
       self.NOMINAL = {}
       self.NOMINAL["yyyy"] = int(header[1])
@@ -48,16 +52,39 @@ class raso( object ):
       self.LEVELS    = int(header[6])
       self.P_SRC     = str(header[7])
       self.NP_SRC    = str(header[8])
-      self.LAT       = float(header[9])/1.e4 
-      self.LON       = float(header[10])/1.e4
+      self.LAT       = float(header[9]) / 1.e4 
+      self.LON       = float(header[10]) / 1.e4
       self.DATA      = []   # No data: empty list
 
 
    # Small print method for raso objects
-   def show(self,parameters,paramconfig,head=True,fid=None):
-      """
-      Method for raso class objects. Loops trough the extracted
-      data and prints the observations.
+   def show(self, parameters, paramconfig, head = True, fid = None):
+      """show(parameters, paramconfig, head = True, fid = None)
+
+      Method to create output (either to stdout or write the data
+      into a file, see fid).
+      Loops trough the extracted data and prints the observations.
+
+      Parameters
+      ----------
+      parameters : list
+         list of strings, names of the parameters to be shown.
+      paramconfig : dictionary
+         The parameter config as returned by returned by PyIGRA.Config.
+         Keys: parameter name; values: dict object
+         with (at the moment) a format specification. E.g.,
+         {'TEMPERATURE':{'format':'{:7.2f}'},...}
+      head : boolean
+         default is True, whether or not the header should be printed.
+      fid: either None or a file handler
+         If None the output will be
+         printed on stdout. If a file handler the data will be written
+         into the file specified by the file handler rather than printed
+         to stdout.
+
+      Returns
+      -------
+      No return, outputs data to stdout or file.
       """
 
       # Looping trough data (levels) and prints data
@@ -72,24 +99,33 @@ class raso( object ):
          NOMINAL = "{0:04d}{1:02d}{2:02d}{3:02d}".format(self.NOMINAL["yyyy"],
                     self.NOMINAL["mm"],self.NOMINAL["dd"],self.NOMINAL["HH"])
          RELEASE = "{0:02d}{1:02d}".format(self.RELEASE["HH"],self.RELEASE["MM"])
-         if fid:
-            fid.write("{:s} {:s}   ".format(NOMINAL,RELEASE))
-         else:
-            print("{:s} {:s}   ".format(NOMINAL,RELEASE))
          # Show data
-         self.DATA[i].show(parameters,paramconfig,fid)
+         self.DATA[i].show(NOMINAL, RELEASE, parameters, paramconfig, fid)
 
    # Method to append data. Given format. Input is tuple from
    # regex match (re.match) in a certain order!
    def append(self,data):
-      """
+      """append(data)
+
       Helper function appending observations to the raso objects.
+      Given input "data" a new raso_data object is created and appendet
+      to self.DATA.
+
+      Parameters
+      ----------
+      data : list
+         containing one observation (one line) from the IGRA data file.
+
+      Returns
+      -------
+      No return.
       """
       self.DATA.append(raso_data(data))
 
    # Check if we have as much data stored as indicated by the header
    def checklevels(self):
-      """
+      """checklevels()
+
       The header contains number of expected levels/observations
       per block. Checking levels. If less lines of data have been
       extracted than number levels expected the script will run into
@@ -106,17 +142,26 @@ class raso( object ):
 # -------------------------------------------------------------------
 # Raso data class
 # -------------------------------------------------------------------
-class raso_data( object ):
-   """
-   Helper class raso_data. Each data IGRA data line consists of a set
-   of observed values (can be missing as well) such as TEMPERATURE,
-   GPHEIGHT, DEWPOINT, ...
-   This object parses and stores these values.
+class raso_data(object):
 
-   Args:
-      data: string containing one observation from the IGRA data file.
-   """
    def __init__(self,data):
+      """raso_data(data)
+
+      Helper class raso_data. Each data IGRA data line consists of a set
+      of observed values (can be missing as well) such as TEMPERATURE,
+      GPHEIGHT, DEWPOINT, ...
+      This object parses and stores these values.
+
+      Parameters
+      ----------
+      data : list
+         containing one observation (one line) from the IGRA data file.
+
+      Returns
+      -------
+      Returns nothing, stores input data on the object itself.
+      """
+
       # Data/code description see:
       # - http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt
       self.TYP1             = int(data[0])
@@ -134,31 +179,47 @@ class raso_data( object ):
       self.WINDSPEED        = float(data[12]) if int(data[12]) <= -8888 else float(data[12])/10.
 
    # Print data
-   def show(self,parameters,paramconfig,fid):
-      """
+   def show(self, NOMINAL, RELEASE, parameters, paramconfig, fid):
+      """show(self, NOMINAL, RELEASE, parameters, paramconfig, fid)
+
       Helper method to show/display the data.
 
-      Args:
-         parameters: list object of characters to specify what should be
-                     printed (e.g., ['TEMPERATURE','PRESSURE']
-         paramconfig: parameter config returned by PyIGRA.Config. Dict
-                     object. Keys: parameter name; values: dict object
-                     with (at the moment) a format specification. E.g.,
-                     {'TEMPERATURE':{'format':'%7.2f'},...}
-         fid: either None or a file handler. If None the output will be
-              printed on stdout. If a file handler the data will be written
-              into the file specified by the file handler rather than printed
-              to stdout.
+      Parameters
+      ----------
+      NOMINAL : string
+         nomal date/time of the sounding (format YYYYmmddHH)
+      RELEASE : string, release time (HHMM; often "9999")
+      parameters : list
+         object of characters to specify what should be
+         printed (e.g., ['TEMPERATURE','PRESSURE']
+      paramconfig : dictionary
+         The parameter config as returned by returned by PyIGRA.Config.
+         Keys: parameter name; values: dict object
+         with (at the moment) a format specification. E.g.,
+         {'TEMPERATURE':{'format':'{:7.2f}'},...}
+      fid: either None or a file handler
+         If None the output will be
+         printed on stdout. If a file handler the data will be written
+         into the file specified by the file handler rather than printed
+         to stdout.
+
+      Returns
+      -------
+      No return. Either prints the data on stdout or writes it to a
+      file (see in put fid).
       """
 
-      tmpdata = []
-      for rec in parameters: tmpdata.append("self.{0:s}".format(rec))
-      tmpfmt  = []
+      tmpdata = [NOMINAL, RELEASE]
+      for rec in parameters: tmpdata.append(getattr(self, rec)) #"self.{0:s}".format(rec))
+      tmpfmt  = ["{:s}", "{:s}"]
       for rec in parameters: tmpfmt.append(paramconfig[rec]['format'])
+      tmpfmt  = " ".join(tmpfmt)
 
       if fid:
-         eval("fid.write(\'{0:s}\\n\' % tuple(({1:s})))".format(" ".join(tmpfmt),",".join(tmpdata))) 
+         #eval("fid.write(\'{0:s}\\n\' % tuple(({1:s})))".format(" ".join(tmpfmt),",".join(tmpdata))) 
+         tmpfmt += "\n"
+         fid.write(tmpfmt.format(*tmpdata))
       else:
-         print eval("\'{0:s}\' % tuple(({1:s}))".format(" ".join(tmpfmt),",".join(tmpdata))) 
+         print(tmpfmt.format(*tmpdata))
 
 

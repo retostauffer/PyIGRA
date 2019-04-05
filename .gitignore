@@ -1,12 +1,14 @@
 
+
 old
-venv
+venv*
 test*.txt
 *-data.txt
 *-data.txt.zip
 
 *.pyc
 */*.pyc
+*.egg-info/
 
 # Ignore downloaded "cached" files
 *.txt
