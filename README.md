@@ -1,7 +1,6 @@
 
 
-The PyIGRA Package
-==================
+# The PyIGRA Package
 
 The [National Centres for Environmental Information](https://www.ncdc.noaa.gov/data-access/weather-balloon/integrated-global-radiosonde-archive)
 provides a large global archive for vertical soundings also known as radiosondes.
@@ -9,7 +8,7 @@ __PyIGRA__ downloads and extracts data from the
 [Integrated Global Radiosonde Archive](https://www.ncdc.noaa.gov/data-access/weather-balloon/integrated-global-radiosonde-archive)
 data set and prepares them in a more handy data format.
 
-**NOTE**: Slightly changed output format. The data set provides information
+**NOTE (2017)**: Slightly changed output format. The data set provides information
 about the nominal time (date/time when the sounding was planned) and
 a release time (actual release time). In an earlier version I've tried
 to combine them in a simple way which was not always correct. I've decided
@@ -25,18 +24,16 @@ to return the full information.
 For more details please read the data set [format description file](ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt).
 
 
-Package Installation
-====================
+# Package Installation
 
 ```bash
    python setup.py install
 ```
 
-Requires the additional python modules and `ConfigParser`.
+Requires the additional python module `ConfigParser`.
 
 
-Using the PyIGRA Package
-========================
+# Using the PyIGRA Package
 
 There is a script called **PyIGRA_test.sh** which provides an
 example of the main functionality of the PyIGRA package
@@ -69,18 +66,20 @@ and outputs the data in a new format. In this case the data will be
 piped into the output file (-o/--output) as specified in the script.
 
 
-INFORMATION
-=======================
+# INFORMATION
+
 - Autor:    Reto Stauffer<at>uibk.ac.at
-- Date:     2016-10-11
-- License:  GPL3+
+- Date:     2019-04-05
+- License:  GPL-2
 
 A detailed description of the IGRA2 data format:
-- ftp://ftp.ncdc.noaa.gov/pub/data/igra/igra2-list-format.txt (station list format)
-- ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt (data format)
+- [ftp://ftp.ncdc.noaa.gov/pub/data/igra/igra2-list-format.txt](ftp://ftp.ncdc.noaa.gov/pub/data/igra/igra2-list-format.txt) (station list format)
+- [ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt](ftp://ftp.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt) (data format)
 
 Station list used by PyIGRA_search:
-- http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt
+- [http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt](http://www1.ncdc.noaa.gov/pub/data/igra/data/igra2-data-format.txt)
 
 Direct data access:
-- http://www1.ncdc.noaa.gov/pub/data/igra/data/data-por/
+- [http://www1.ncdc.noaa.gov/pub/data/igra/data/data-por/](http://www1.ncdc.noaa.gov/pub/data/igra/data/data-por/)
+
+
