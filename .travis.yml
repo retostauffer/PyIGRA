@@ -4,5 +4,4 @@ python:
     - 3.6
 
 install: python setup.py install
-script:
-    - bash test.sh
+script: make test
