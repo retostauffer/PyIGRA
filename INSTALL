@@ -1,10 +1,16 @@
 
 
-PyIGRA is a small python module which comes with two executables
+# Installation
+
+PyIGRA is a small python package which comes with two executables
 to (i) search for the station ID identifier (PyIGRA_search) and
 to (ii) download and convert the IGRA data (PyIGRA).
 
 The module can be simply installed using
 
-   cd PyPackage && sudo python setup.py install
+* sudo python setup.py install
+
+Or directly via github using pip:
+
+* sudo pip install git+https://github.com/retostauffer/PyIGRA.git
 

@@ -14,6 +14,9 @@ readme:
 # Test
 .PHONY: test
 test:
+	PyIGRA_search --id Innsbruck
+	PyIGRA_search --id ASM00094120
 	PyIGRA --keep --id ASM00094120 -o ASM00094120.txt --limit 3
-	PyIGRA --keep --id ASM00094120 -o GMM00010393.txt -p PRESSURE,TEMPERATURE --limit 3
+	PyIGRA --keep --id ASM00094120 -o sounding_data.txt -p PRESSURE,TEMPERATURE --limit 3
+	PyIGRA --keep --id ASM00094120 -o sounding_data.txt -p PRESSURE,TEMPERATURE
 
