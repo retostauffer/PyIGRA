@@ -4,3 +4,6 @@ venv
 test*.txt
 *-data.txt
 *-data.txt.zip
+
+*.pyc
+*/*.pyc
