@@ -1,4 +1,9 @@
 
+# CI
+
+Currently testing against python 2.7, python 3.4, 3.5, and 3.6
+(see [travis config](.travis.yml)). Current buld status:
+![](https://travis-ci.org/retostauffer/PyIGRA.svg?branch=master)
 
 # The PyIGRA Package
 
