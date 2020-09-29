@@ -67,9 +67,12 @@ class Config( object ):
          resource_package = os.path.dirname(__file__) 
          log.debug("Package path is \"{0:s}\"".format(resource_package))
          file = os.path.join(resource_package,'config','default.conf')
+      if not os.path.isfile(file):
+          raise Exception("Trying to read file \"{:s}\"; does not exist.".format(file))
 
       # Read config file
       CNF = ConfigParser.ConfigParser()
+      log.info("Reading {:s}".format(file))
       CNF.read(file)
       try:
          self.url        = CNF.get("main","url")

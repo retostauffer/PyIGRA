@@ -29,6 +29,6 @@ setup(name             = "PyIGRA", # This is the package name
       install_requires     = ["ConfigParser"],
       scripts              = ["bin/PyIGRA","bin/PyIGRA_search"],
       include_package_data = True,
-      zip_safe = True)
+      zip_safe = False)
 
 

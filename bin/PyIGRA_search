@@ -37,7 +37,6 @@ if __name__ == "__main__":
    import tempfile
    from PyIGRA import Config
    ENC = "utf8"
-   log.info('foo main')
    config = Config()
 
    if sys.version_info[0] <= 2:
